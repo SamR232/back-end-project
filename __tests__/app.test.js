@@ -25,8 +25,25 @@ describe("GET requests", () => {
       .expect(200)
       .then(({ body }) => {
         let { userTopics } = body;
-        console.log(userTopics);
         expect(userTopics).toBeInstanceOf(Array);
+        expect(
+          userTopics.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                slug: expect.any(String),
+                description: expect.any(String),
+              })
+            );
+          })
+        );
+      });
+  });
+  test("Status 404: Not found", () => {
+    return request(app)
+      .get("/api/anfg")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toEqual("Not Found");
       });
   });
 });
