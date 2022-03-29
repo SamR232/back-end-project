@@ -9,7 +9,7 @@ app.get(`/api/topics`, getTopics);
 app.get(`/api/users/:article_id`, getArticleById);
 
 app.all("/*", (req, res) => {
-  res.status(404).send({ message: "Not Found" });
+  res.status(404).send({ msg: "Not Found" });
 });
 
 app.use((err, req, res, next) => {
@@ -22,8 +22,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  if (err.message && err.status) {
-    res.status(err.status).send({ message: err.message });
+  if (err.msg && err.status) {
+    res.status(err.status).send({ msg: err.msg });
   } else {
     next(err);
   }
@@ -31,7 +31,7 @@ app.use((err, req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.log(err, "<<< my error");
-  res.status(500).send({ message: "internal server error" });
+  res.status(500).send({ msg: "internal server error" });
 });
 
 module.exports = app;

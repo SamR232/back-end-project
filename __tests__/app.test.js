@@ -34,12 +34,12 @@ describe(`GET /api/topics`, () => {
         );
       });
   });
-  test("Status: 404 - Not found", () => {
+  test("Status: 404 - Not found, when endpoint does not exist", () => {
     return request(app)
       .get("/api/anfg")
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toEqual("Not Found");
+        expect(body.msg).toEqual("Not Found");
       });
   });
 });
@@ -57,13 +57,22 @@ author, title, article_id, body, topic, created_at, votes `, () => {
         expect(articleInfo.author).toEqual("icellusedkars");
       });
   });
-  test(`Status: 400 - Bad Request`, () => {
+  test(`Status: 400 - Bad Request, when id is not an integer`, () => {
     const article_id = "dog";
     return request(app)
       .get(`/api/users/${article_id}`)
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toEqual("Invalid id");
+      });
+  });
+  test(`Status: 404 - Bad Request, id does not exist`, () => {
+    const article_id = 1000;
+    return request(app)
+      .get(`/api/users/${article_id}`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("article not found");
       });
   });
 });
