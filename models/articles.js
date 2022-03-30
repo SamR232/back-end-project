@@ -26,7 +26,7 @@ exports.updateVotesByArticleId = (articleId, inc_votes) => {
     )
     .then((results) => {
       if (results.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "article not found" });git
+        return Promise.reject({ status: 404, msg: "article not found" });
       }
       return results.rows[0];
     });

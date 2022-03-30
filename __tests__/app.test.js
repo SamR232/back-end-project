@@ -142,4 +142,15 @@ describe("GET api/users", () => {
     const { body } = await request(app).get("/api/asdf").expect(404);
     expect(body.msg).toEqual("Not Found");
   });
+  test("Status: 404 - article id does not exist", async () => {
+    const { body } = await request(app)
+      .patch("/api/articles/1000")
+      .send({ inc_votes: 10 })
+      .expect(404);
+    expect(body.msg).toEqual("article not found");
+  });
+});
+
+describe("GET /api/articles/:article_id (comment count)", () => {
+  test.todo('');
 });
