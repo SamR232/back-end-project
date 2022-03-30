@@ -115,4 +115,22 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(400);
     expect(body.msg).toEqual("Bad Request");
   });
+  test("Status: 400 - endpoint does not exist", () => {
+    return request(app)
+      .patch("/api/articles/anfg")
+      .send({ inc_votes: 10 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  test("Status: 404 - article id does not exist", () => {
+    return request(app)
+      .patch("/api/articles/1000")
+      .send({ inc_votes: 10 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("article not found");
+      });
+  });
 });

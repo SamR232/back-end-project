@@ -25,6 +25,9 @@ exports.updateVotesByArticleId = (articleId, inc_votes) => {
       [inc_votes, articleId]
     )
     .then((results) => {
+      if (results.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "article not found" });
+      }
       return results.rows[0];
     });
 };
