@@ -2,12 +2,23 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+//Require in topics
 const { getTopics } = require("./controllers/topics");
-const { getArticleById } = require("./controllers/articles");
 
+//Require in articles
+const {
+  getArticleById,
+  patchVotesByArticleId,
+} = require("./controllers/articles");
+
+//Topics
 app.get(`/api/topics`, getTopics);
-app.get(`/api/users/:article_id`, getArticleById);
 
+//Articles
+app.get(`/api/articles/:article_id`, getArticleById);
+app.patch(`/api/articles/:article_id`, patchVotesByArticleId);
+
+//Error handling
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Not Found" });
 });
@@ -15,7 +26,7 @@ app.all("/*", (req, res) => {
 app.use((err, req, res, next) => {
   const errors = ["22P02"];
   if (errors.includes(err.code)) {
-    res.status(400).send({ msg: "Invalid id" });
+    res.status(400).send({ msg: "Bad Request" });
   } else {
     next(err);
   }
