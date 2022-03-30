@@ -34,7 +34,7 @@ describe(`GET /api/topics`, () => {
         );
       });
   });
-  test("Status: 404 - Not found, when endpoint does not exist", () => {
+  test("Status: 404 - endpoint does not exist", () => {
     return request(app)
       .get("/api/anfg")
       .expect(404)
@@ -49,7 +49,7 @@ describe("GET /api/articles/:article_id", () => {
 author, title, article_id, body, topic, created_at, votes `, () => {
     const article_id = 2;
     return request(app)
-      .get(`/api/users/${article_id}`)
+      .get(`/api/articles/${article_id}`)
       .expect(200)
       .then(({ body }) => {
         let { articleInfo } = body;
@@ -57,22 +57,62 @@ author, title, article_id, body, topic, created_at, votes `, () => {
         expect(articleInfo.author).toEqual("icellusedkars");
       });
   });
-  test(`Status: 400 - Bad Request, when id is not an integer`, () => {
+  test(`Status: 400 - id is of wrong data type`, () => {
     const article_id = "dog";
     return request(app)
-      .get(`/api/users/${article_id}`)
+      .get(`/api/articles/${article_id}`)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toEqual("Invalid id");
+        expect(body.msg).toEqual("Bad Request");
       });
   });
-  test(`Status: 404 - Bad Request, id does not exist`, () => {
+  test(`Status: 404 - id does not exist`, () => {
     const article_id = 1000;
     return request(app)
-      .get(`/api/users/${article_id}`)
+      .get(`/api/articles/${article_id}`)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toEqual("article not found");
       });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("Status: 200 - increases vote count", () => {
+    let updateVotes = { inc_votes: 50 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updateVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.votes).toBe(150);
+      });
+  });
+  test("Status: 200 - decreases vote count", () => {
+    let updateVotes = { inc_votes: -50 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updateVotes)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.votes).toBe(50);
+      });
+  });
+  //async await
+  test("Status: 400 - patch object is empty", async () => {
+    let votesObj = {};
+    const { body } = await request(app)
+      .patch("/api/articles/1")
+      .send(votesObj)
+      .expect(400);
+    expect(body.msg).toEqual("No data in object");
+  });
+  test("Status: 400 - invalid data type for votes", async () => {
+    let votesObj = { inc_votes: "dog" };
+    const { body } = await request(app)
+      .patch("/api/articles/1")
+      .send(votesObj)
+      .expect(400);
+    expect(body.msg).toEqual("Bad Request");
   });
 });
