@@ -11,12 +11,18 @@ const {
   patchVotesByArticleId,
 } = require("./controllers/articles");
 
+//Require in users
+const { getUsernames } = require("./controllers/users");
+
 //Topics
 app.get(`/api/topics`, getTopics);
 
 //Articles
 app.get(`/api/articles/:article_id`, getArticleById);
 app.patch(`/api/articles/:article_id`, patchVotesByArticleId);
+
+//Users
+app.get("/api/users", getUsernames);
 
 //Error handling
 app.all("/*", (req, res) => {
