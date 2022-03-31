@@ -150,5 +150,41 @@ describe("GET api/articles", () => {
     const { body } = await request(app).get("/api/articles").expect(200);
     console.log(body);
     expect(body).toBeInstanceOf(Array);
+    expect(
+      body.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      })
+    );
+  });
+});
+
+describe("GET /api/articles/:article_id (comment count)", () => {
+  test("Status: 200 - an article response object which also has a comment count", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        let { articleInfo } = body;
+        expect(articleInfo["comment_count"]).toBe(11);
+        expect(typeof articleInfo["comment_count"]).toBe("number");
+      });
+  });
+  test("Status: 404 - article id does not exist", () => {
+    return request(app)
+      .get("/api/articles/1000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("article not found");
+      });
   });
 });
