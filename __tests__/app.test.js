@@ -115,22 +115,33 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(400);
     expect(body.msg).toEqual("Bad Request");
   });
-  test("Status: 400 - endpoint does not exist", () => {
-    return request(app)
+  test("Status: 400 - endpoint does not exist", async () => {
+    const { body } = await request(app)
       .patch("/api/articles/anfg")
       .send({ inc_votes: 10 })
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toEqual("Bad Request");
-      });
+      .expect(400);
+    expect(body.msg).toEqual("Bad Request");
   });
-  test("Status: 404 - article id does not exist", () => {
-    return request(app)
+  test("Status: 404 - article id does not exist", async () => {
+    const { body } = await request(app)
       .patch("/api/articles/1000")
       .send({ inc_votes: 10 })
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toEqual("article not found");
-      });
+      .expect(404);
+    expect(body.msg).toEqual("article not found");
+  });
+});
+
+describe("GET api/users", () => {
+  test("Status: 200 - responds with an array of objects with a username property", async () => {
+    const { body } = await request(app).get("/api/users");
+    expect(200);
+    console.log(body);
+    expect(body).toBeInstanceOf(Array);
+    expect(typeof body[0].username).toBe("string");
+    expect(body.length).toBe(4);
+  });
+  test("Status: 404 - endpoint does not exist", async () => {
+    const { body } = await request(app).get("/api/asdf").expect(404);
+    expect(body.msg).toEqual("Not Found");
   });
 });
