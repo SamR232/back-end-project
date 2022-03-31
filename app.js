@@ -9,8 +9,11 @@ const { getTopics } = require("./controllers/topics");
 const {
   getArticleById,
   patchVotesByArticleId,
-  getArticles
+  getArticles,
 } = require("./controllers/articles");
+
+//Require in comments
+const { getArticleComments } = require("./controllers/comments");
 
 //Require in users
 const { getUsernames } = require("./controllers/users");
@@ -22,6 +25,9 @@ app.get(`/api/topics`, getTopics);
 app.get(`/api/articles`, getArticles);
 app.get(`/api/articles/:article_id`, getArticleById);
 app.patch(`/api/articles/:article_id`, patchVotesByArticleId);
+
+//Comments
+app.get("/api/articles/:article_id/comments", getArticleComments);
 
 //Users
 app.get("/api/users", getUsernames);
