@@ -227,7 +227,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/2/comments")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual([]);
+        expect(body.msg).toEqual('no comments available');
       });
   });
 });

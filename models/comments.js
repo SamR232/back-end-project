@@ -9,6 +9,9 @@ exports.selectArticleComments = (article_id) => {
       [article_id]
     )
     .then((result) => {
+      if (result.rows.length === 0) {
+        return { msg: "no comments available" };
+      }
       return result.rows;
     });
 };
