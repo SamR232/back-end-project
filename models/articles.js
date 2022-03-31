@@ -20,6 +20,17 @@ exports.selectArticleById = (articleId) => {
     });
 };
 
+exports.selectAllArticles = () => {
+  return db
+    .query(
+      `SELECT * FROM articles
+     ORDER BY created_at DESC;`
+    )
+    .then((result) => {
+      return result.rows;
+    });
+};
+
 exports.updateVotesByArticleId = (articleId, inc_votes) => {
   if (!articleId || !inc_votes) {
     return Promise.reject({ status: 400, msg: "No data in object" });
