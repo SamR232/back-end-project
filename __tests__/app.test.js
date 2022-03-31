@@ -3,7 +3,7 @@ const db = require("../db/connection");
 const testData = require("../db/data/test-data/index");
 const request = require("supertest");
 const app = require("../app");
-const articles = require("../db/data/test-data/articles");
+
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
@@ -148,7 +148,6 @@ describe("GET api/users", () => {
 describe("GET api/articles", () => {
   test("responds with an array of article objects, each containing author(username), title, article_id, topic, created_at, votes, comment_count", async () => {
     const { body } = await request(app).get("/api/articles").expect(200);
-    console.log(body);
     expect(body).toBeInstanceOf(Array);
     expect(
       body.forEach((article) => {
@@ -165,6 +164,10 @@ describe("GET api/articles", () => {
         );
       })
     );
+  });
+  test("articles are sorted by order of date in descending order", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    expect(body).toBeSortedBy("created_at", { descending: true });
   });
 });
 

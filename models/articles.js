@@ -21,9 +21,14 @@ exports.selectArticleById = (articleId) => {
 };
 
 exports.selectAllArticles = () => {
-  return db.query("SELECT * FROM articles;").then((result) => {
-    return result.rows;
-  });
+  return db
+    .query(
+      `SELECT * FROM articles
+     ORDER BY created_at DESC;`
+    )
+    .then((result) => {
+      return result.rows;
+    });
 };
 
 exports.updateVotesByArticleId = (articleId, inc_votes) => {
