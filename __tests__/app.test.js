@@ -135,22 +135,13 @@ describe("GET api/users", () => {
   test("Status: 200 - responds with an array of objects with a username property", async () => {
     const { body } = await request(app).get("/api/users");
     expect(200);
+    console.log(body);
     expect(body).toBeInstanceOf(Array);
     expect(typeof body[0].username).toBe("string");
+    expect(body.length).toBe(4);
   });
   test("Status: 404 - endpoint does not exist", async () => {
     const { body } = await request(app).get("/api/asdf").expect(404);
     expect(body.msg).toEqual("Not Found");
   });
-  test("Status: 404 - article id does not exist", async () => {
-    const { body } = await request(app)
-      .patch("/api/articles/1000")
-      .send({ inc_votes: 10 })
-      .expect(404);
-    expect(body.msg).toEqual("article not found");
-  });
-});
-
-describe("GET /api/articles/:article_id (comment count)", () => {
-  test.todo('');
 });
