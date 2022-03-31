@@ -1,7 +1,15 @@
+const { response } = require("express");
 const {
   selectArticleById,
   updateVotesByArticleId,
+  selectAllArticles,
 } = require("../models/articles");
+
+exports.getArticles = (req, res, next) => {
+  selectAllArticles().then((articles) => {
+    res.status(200).send(articles);
+  });
+};
 
 exports.getArticleById = (req, res, next) => {
   let { article_id } = req.params;

@@ -9,6 +9,7 @@ const { getTopics } = require("./controllers/topics");
 const {
   getArticleById,
   patchVotesByArticleId,
+  getArticles
 } = require("./controllers/articles");
 
 //Require in users
@@ -18,6 +19,7 @@ const { getUsernames } = require("./controllers/users");
 app.get(`/api/topics`, getTopics);
 
 //Articles
+app.get(`/api/articles`, getArticles);
 app.get(`/api/articles/:article_id`, getArticleById);
 app.patch(`/api/articles/:article_id`, patchVotesByArticleId);
 

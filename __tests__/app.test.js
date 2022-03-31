@@ -3,6 +3,7 @@ const db = require("../db/connection");
 const testData = require("../db/data/test-data/index");
 const request = require("supertest");
 const app = require("../app");
+const articles = require("../db/data/test-data/articles");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
@@ -133,9 +134,7 @@ describe("PATCH /api/articles/:article_id", () => {
 
 describe("GET api/users", () => {
   test("Status: 200 - responds with an array of objects with a username property", async () => {
-    const { body } = await request(app).get("/api/users");
-    expect(200);
-    console.log(body);
+    const { body } = await request(app).get("/api/users").expect(200);
     expect(body).toBeInstanceOf(Array);
     expect(typeof body[0].username).toBe("string");
     expect(body.length).toBe(4);
@@ -143,5 +142,13 @@ describe("GET api/users", () => {
   test("Status: 404 - endpoint does not exist", async () => {
     const { body } = await request(app).get("/api/asdf").expect(404);
     expect(body.msg).toEqual("Not Found");
+  });
+});
+
+describe("GET api/articles", () => {
+  test("responds with an array of article objects, each containing author(username), title, article_id, topic, created_at, votes, comment_count", async () => {
+    const { body } = await request(app).get("/api/articles").expect(200);
+    console.log(body);
+    expect(body).toBeInstanceOf(Array);
   });
 });
