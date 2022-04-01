@@ -13,7 +13,10 @@ const {
 } = require("./controllers/articles");
 
 //Require in comments
-const { getArticleComments } = require("./controllers/comments");
+const {
+  getArticleComments,
+  postArticleComment,
+} = require("./controllers/comments");
 
 //Require in users
 const { getUsernames } = require("./controllers/users");
@@ -28,6 +31,7 @@ app.patch(`/api/articles/:article_id`, patchVotesByArticleId);
 
 //Comments
 app.get("/api/articles/:article_id/comments", getArticleComments);
+app.post("/api/articles/:article_id/comments", postArticleComment);
 
 //Users
 app.get("/api/users", getUsernames);
@@ -41,6 +45,15 @@ app.use((err, req, res, next) => {
   const errors = ["22P02"];
   if (errors.includes(err.code)) {
     res.status(400).send({ msg: "Bad Request" });
+  } else {
+    next(err);
+  }
+});
+
+app.use((err, req, res, next) => {
+  const errors = ["23503"];
+  if (errors.includes(err.code)) {
+    res.status(404).send({ msg: "username does not exist" });
   } else {
     next(err);
   }
