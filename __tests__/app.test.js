@@ -192,7 +192,7 @@ describe("GET /api/articles/:article_id (comment count)", () => {
   });
 });
 describe("GET /api/articles/:article_id/comments", () => {
-  test("Status 200: an array of comments for the given article_id of which has the properties: comment_id, votes, created_at, author(username), body", () => {
+  test("Status: 200 an array of comments for the given article_id of which has the properties: comment_id, votes, created_at, author(username), body", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -214,7 +214,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         );
       });
   });
-  test("Status:404 endpoint does not exist", () => {
+  test("Status: 404 endpoint does not exist", () => {
     return request(app)
       .get("/api/articles/1/asdg")
       .expect(404)
@@ -222,12 +222,34 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toEqual("Not Found");
       });
   });
-  test('article doesn"t have any comments', () => {
+  test('Status: 200 article doesn"t have any comments', () => {
     return request(app)
       .get("/api/articles/2/comments")
-      .expect(200)
+      .expect(404)
       .then(({ body }) => {
-        expect(body).toEqual([]);
+        expect(body.msg).toEqual("No comments for specified article");
+      });
+  });
+
+  test('Status: 404 article doesn"t exist', () => {
+    return request(app)
+      .get("/api/articles/3000/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("No comments for specified article");
       });
   });
 });
+
+// describe("POST /api/articles/:article_id/comments", () => {
+//   test("Status 201: posts a comment object with username and body properties", () => {
+//     const comment = { username: "abc123", body: "text" };
+//     return request(app)
+//       .post("/api/articles/:article_id/comments")
+//       .send(comment)
+//       .expect(201)
+//       .then(({ body }) => {
+//         expect(body).toEqual(comment);
+//       });
+//   });
+// });
