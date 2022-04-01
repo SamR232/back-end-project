@@ -214,7 +214,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         );
       });
   });
-  test("endpoint does not exist", () => {
+  test("Status:400 endpoint does not exist", () => {
     return request(app)
       .get("/api/articles/1/asdg")
       .expect(404)
@@ -222,12 +222,22 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toEqual("Not Found");
       });
   });
-  test('article doesn"t have any comments', () => {
-    return request(app)
-      .get("/api/articles/2/comments")
-      .expect(200)
-      .then(({ body }) => {
-        expect(body.msg).toEqual('no comments available');
-      });
-  });
+  // test('article doesn"t have any comments', () => {
+  //   return request(app)
+  //     .get("/api/articles/2/comments")
+  //     .expect(204)
+  //     .then(({ body }) => {
+  //       console.log(body)
+  //       expect(body.msg).toEqual("no comments available");
+  //     });
+  // });
+
+  //test("article id does not exist", () => {
+  //     return request(app)
+  //       .get("/api/articles/3000/comments")
+  //       .expect(404)
+  //       .then(({ body }) => {
+  //         expect(body.msg).toEqual("article id doesn't exist");
+  //       });
+  //   });
 });
