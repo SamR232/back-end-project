@@ -3,6 +3,7 @@ const db = require("../db/connection");
 const testData = require("../db/data/test-data/index");
 const request = require("supertest");
 const app = require("../app");
+const endpoints = require("../endpoints.json");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -241,6 +242,53 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("GET /api/articles (queries)", () => {
+  test("200: sorts the articles by the column, defaulting to date in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=date")
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("200: order search by ascending", () => {
+    return request(app)
+      .get("/api/articles?sort_by=date&order=asc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toBeSortedBy("created_at", {
+          descending: false,
+        });
+      });
+  });
+  test("200: filter the articles by topic", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.length).toBe(1);
+      });
+  });
+  test("400: invalid sort_by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=month")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Please enter a valid sort_by query");
+      });
+  });
+  test("400: invalid order query", () => {
+    return request(app)
+      .get("/api/articles?order=yellow")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Please enter a valid order query");
+      });
+  });
+});
+
 describe("POST /api/articles/:article_id/comments", () => {
   test("Status: 201 posts a comment object with username and body properties", () => {
     const comment = { username: "icellusedkars", body: "this is a comment" };
@@ -259,7 +307,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("Status: 400 invalid article id", async () => {
+  test("Status: 400 invalid article id", () => {
     return request(app)
       .post("/api/articles/asdg/comments")
       .send({ username: "icellusedkars", body: "this is a comment" })
@@ -268,13 +316,24 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
-  test("Status: 404 user not found", async () => {
+  test("Status: 404 user not found", () => {
     return request(app)
       .post("/api/articles/2/comments")
       .send({ username: "captain america", body: "best avenger" })
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("username does not exist");
+      });
+  });
+});
+
+describe("GET /api", () => {
+  test("Status 200: returns a list of endpoints included in api", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(endpoints);
       });
   });
 });

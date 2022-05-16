@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
+const cors = require("cors");
+app.use(cors());
 
 //Require in topics
 const { getTopics } = require("./controllers/topics");
@@ -21,6 +23,9 @@ const {
 //Require in users
 const { getUsernames } = require("./controllers/users");
 
+//Require API
+const { getAPI } = require("./controllers/api");
+
 //Topics
 app.get(`/api/topics`, getTopics);
 
@@ -35,6 +40,9 @@ app.post("/api/articles/:article_id/comments", postArticleComment);
 
 //Users
 app.get("/api/users", getUsernames);
+
+//API
+app.get("/api", getAPI);
 
 //Error handling
 app.all("/*", (req, res) => {
