@@ -1,55 +1,29 @@
-# Create Files
+# Project details
 
-To run this project:
-You will need to create two .env files for your project: .env.test and .env.development. Once these files have been created; add PGDATABASE=nc_news_test and PGDATABASE=nc_news respectively.
+Using a PostgreSQL database, I have set up a restful API to perform GET, POST, PATCH and DELETE requests. This can be used to create a front-end user platform to view articles by topic, including their comments. I have included a link to view the hosted version on Heroku.
 
-# Installation
+# Hosted version
 
-# Mac
+https://blueberry-sundae-37409.herokuapp.com/
 
-Install Postgres App https://postgresapp.com/
-Open the app (little blue elephant) and select initialize/start
-type psql into your terminal. You should then see something similar to:
-psql (9.6.5, server 9.6.6)
+# If you would like to try this API locally
 
-username=#
-if the above does not show/you get an error, run the following commands in your terminal:
-brew update
-brew doctor
-brew install postgresql
-
-# Linux/Ubuntu terminal:
-
-Run these commands: 
-
-sudo apt-get update
-
-sudo apt-get install postgresql postgresql-contrib
-
-Next run the following commands to create a database user for Postgres.
-
-sudo -u postgres createuser --superuser $USER
-
-sudo -u postgres createdb $USER
-
-If you see the following error: role "username-here" already exists, it means that you already have a Postgres user so can move on to the next step.
-
-If you see the following error: Cannot connect to database/server or similar, run 'sudo service postgresql start' to ensure that the postgresql server is running before trying the above again.
-
-Then run this command to enter the terminal application for PostgreSQL:
-
-psql
+- Fork this repo to your GitHub
+- Clone it using the link on to your local machine (git clone _link_)
+- Create two .env files for your project: .env.test and .env.development. Once these files have been created; add PGDATABASE=nc_news_test and PGDATABASE=nc_news respectively.
 
 # Scripts to run
 
-npm install
+- npm install
 
-npm install express
+- npm run setup-dbs
 
-npm run setup-dbs
-
-npm run seed
+- npm run seed
 
 # Testing
 
-npm test
+- npm test
+
+# Versions
+
+For the API to work you will need to install Node (version 14+), npm (version 8+) and PostgresQL (version 13+). Earlier versions have not been tested but may still work.
