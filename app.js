@@ -18,6 +18,7 @@ const {
 const {
   getArticleComments,
   postArticleComment,
+  deleteArticleCommentById,
 } = require("./controllers/comments");
 
 //Require in users
@@ -37,6 +38,7 @@ app.patch(`/api/articles/:article_id`, patchVotesByArticleId);
 //Comments
 app.get("/api/articles/:article_id/comments", getArticleComments);
 app.post("/api/articles/:article_id/comments", postArticleComment);
+app.delete("/api/comments/:comment_id", deleteArticleCommentById);
 
 //Users
 app.get("/api/users", getUsernames);

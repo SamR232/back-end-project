@@ -228,7 +228,9 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/2/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toEqual("No comments for specified article");
+        expect(body.msg).toEqual(
+          "No comments for specified article, check article id exists"
+        );
       });
   });
 
@@ -237,7 +239,9 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/3000/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toEqual("No comments for specified article");
+        expect(body.msg).toEqual(
+          "No comments for specified article, check article id exists"
+        );
       });
   });
 });
@@ -334,6 +338,35 @@ describe("GET /api", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual(endpoints);
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: delete the comment with matching comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("400: comment_id invalid", () => {
+    return request(app)
+      .delete("/api/comments/five")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  test("404: comment_id does not exist", () => {
+    return request(app)
+      .delete("/api/comments/1000")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual(
+          "No comments for specified comment id, check comment id exists"
+        );
       });
   });
 });
