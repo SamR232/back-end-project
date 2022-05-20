@@ -4,7 +4,7 @@ Using a PostgreSQL database, I have set up a restful API to perform GET, POST, P
 
 # Hosted version
 
-https://blueberry-sundae-37409.herokuapp.com/
+https://samr232-backend-project.herokuapp.com/api
 
 # If you would like to try this API locally
 
@@ -23,6 +23,7 @@ https://blueberry-sundae-37409.herokuapp.com/
 # Testing
 
 - npm test
+  (test data can be viewed in the tables.txt file)
 
 # Versions
 
